@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from .forms import UserRegistrationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import CustomUserCreationForm
+
 # Create your views here.
 def login_view(request):
     if request.method == 'POST':
@@ -54,20 +54,12 @@ def register(request):
             email = form.cleaned_data['email']
             if not User.objects.filter(email=email).exists():
                 user = User.objects.create_user(email=email)
-                return redirect('registration_success')  # Redirect to a success page
+                return render(request,'display.html') 
     else:
         form = UserRegistrationForm()
+    return render(request,'register.html')
 
 
 
 
-def register(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your account has been created successfully!')
-            return redirect('login')
-    else:
-        form = CustomUserCreationForm()
-    return render(request, 'register.html', {'form': form})
+
